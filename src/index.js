@@ -4,3 +4,4 @@ import notifix from 'notiflix';
 
 //Посилання на елементи
 const formEl = document.querySelector('#search-form');
+// const formEl = document.querySelector('#search-form');
