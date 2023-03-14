@@ -14,6 +14,9 @@ formEl.addEventListener('submit', onFormSubmit);
 function onFormSubmit(e) {
   e.preventDefault();
   getPosts();
+  //   getPosts().then(data => {
+  //     console.log(data);
+  //   });
 }
 
 // Функція запиту на сервер
@@ -28,16 +31,20 @@ async function getPosts() {
     const response = await axios(
       `https://pixabay.com/api/?key=${key}&q=${search}&image_type=${imageType}&orientation=${orientation}&safesearch=${safesearch}`
     );
-    if (response.data.hits === []) {
+    if (response.data.hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
-    console.log(response.data.hits);
 
-    // return response.data.hits;
+    return response.data.hits;
   } catch (error) {
   } finally {
     console.log('🧩');
   }
+}
+
+async function makeMarkup() {
+  const data = await getPosts();
+  console.log(data);
 }
