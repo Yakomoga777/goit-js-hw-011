@@ -14,6 +14,7 @@ formEl.addEventListener('submit', onFormSubmit);
 function onFormSubmit(e) {
   e.preventDefault();
   getPosts();
+  // makeMarkup();
   //   getPosts().then(data => {
   //     console.log(data);
   //   });
@@ -36,7 +37,7 @@ async function getPosts() {
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
-
+    console.log(response);
     return response.data.hits;
   } catch (error) {
   } finally {
@@ -44,7 +45,7 @@ async function getPosts() {
   }
 }
 
-async function makeMarkup() {
-  const data = await getPosts();
-  console.log(data);
-}
+// async function makeMarkup() {
+//   const data = await getPosts();
+//   console.log(data);
+// }
