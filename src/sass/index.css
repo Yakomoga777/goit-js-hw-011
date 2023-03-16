@@ -1,4 +1,10 @@
 @import '~node_modules/modern-normalize/modern-normalize.css';
+@import '../../node_modules/simplelightbox/dist/simple-lightbox.min.css';
+:root {
+  --timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-duration: 250ms;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -11,4 +17,14 @@
           clip-path: inset(100%);
   clip: rect(0 0 0 0);
   overflow: hidden;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+p {
+  margin: 0;
 }/*# sourceMappingURL=index.css.map */

@@ -11,12 +11,21 @@ const galleryEl = document.querySelector('.gallery');
 const btnLoadMoreEl = document.querySelector('.load-more');
 
 let page = 1;
+let total = 0;
 // console.log(btnLoadMoreEl);
 
 //Викликаємо слухача
 formEl.addEventListener('submit', onFormSubmit);
 btnLoadMoreEl.addEventListener('click', onLoadMoreClick);
 
+// Ініціалізація SimpleLightbox
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  loop: true,
+});
+
+// lightbox.on();
 //=========================CALLBACKs================
 
 //Функція SUBMIT
@@ -31,6 +40,8 @@ function onFormSubmit(e) {
 function onLoadMoreClick() {
   page += 1;
   generateMarkup();
+  // total += perPage;
+  // console.log(total);
 }
 
 //==============================FUNCTIONS===============
@@ -41,7 +52,8 @@ async function getPosts() {
   const imageType = 'photo';
   const orientation = 'horizontal';
   const safesearch = true;
-  const perPage = 10;
+  const perPage = 200;
+
   try {
     const response = await axios(
       `https://pixabay.com/api/?key=${key}&q=${search}&image_type=${imageType}&orientation=${orientation}&safesearch=${safesearch}&per_page=${perPage}&page=${page}`
@@ -50,42 +62,74 @@ async function getPosts() {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
+    } else {
+      total += response.data.hits.length;
+
+      if (response.data.totalHits <= total) {
+        hidesLoadMoreBtn();
+      }
     }
-    // console.log(response.data.hits);
+
+    console.log(total);
+    console.log(response.data.totalHits);
     return response.data.hits;
   } catch (error) {
   } finally {
     console.log('🧩');
   }
 }
+
 // Функція створення шаблону розмітки
 function createMarkup(item) {
-  return `<div class="photo-card">
-  <img src="${item.webformatURL}" alt="${item.tags}" loading="lazy" />
-  <div class="info">
-    <p class="info-item">${item.likes}
-      <b>Likes</b>
+  return `<a href="${item.largeImageURL}"
+        ><img src="${item.previewURL}" alt="${item.tags}" title=""
+      />
+      <div class="info">
+    <p class="info-item">
+      <b>Likes:</b> ${item.likes}
     </p>
-    <p class="info-item">${item.views}
-      <b>Views</b>
+    <p class="info-item">
+      <b>Views</b> ${item.views}
     </p>
-    <p class="info-item">${item.comments}
-      <b>Comments</b>
+    <p class="info-item">
+      <b>Comments</b> ${item.comments}
     </p>
-    <p class="info-item">${item.downloads}
-      <b>Downloads</b>
+    <p class="info-item">
+      <b>Downloads</b> ${item.downloads}
     </p>
-  </div>
-</div>`;
+  </div></a>
+        
+   `;
+  //  `<div class="photo-card">
+  //   <img src="${item.previewURL}" alt="${item.tags}" loading="lazy" />
+  //   <div class="info">
+  //     <p class="info-item">${item.likes}
+  //       <b>Likes</b>
+  //     </p>
+  //     <p class="info-item">${item.views}
+  //       <b>Views</b>
+  //     </p>
+  //     <p class="info-item">${item.comments}
+  //       <b>Comments</b>
+  //     </p>
+  //     <p class="info-item">${item.downloads}
+  //       <b>Downloads</b>
+  //     </p>
+  //   </div>
+
+  // </div>`;
 }
 // Функція публікації розмітки
 async function generateMarkup() {
+  lightbox.refresh();
+
   const data = await getPosts();
   const markup = data.reduce((acc, item) => {
     return acc + createMarkup(item);
   }, '');
   galleryEl.insertAdjacentHTML('beforeend', markup);
   console.log(markup);
+  lightbox.refresh();
 }
 
 // Функція очистки розмітки

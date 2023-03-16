@@ -39,3 +39,13 @@
   clip: rect(0 0 0 0);
   overflow: hidden;
 }
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+p {
+  margin: 0;
+}
