@@ -19,11 +19,7 @@ formEl.addEventListener('submit', onFormSubmit);
 btnLoadMoreEl.addEventListener('click', onLoadMoreClick);
 
 // Ініціалізація SimpleLightbox
-const lightbox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-  loop: true,
-});
+const lightbox = new SimpleLightbox('.gallery a', {});
 
 // lightbox.on();
 //=========================CALLBACKs================
@@ -52,7 +48,7 @@ async function getPosts() {
   const imageType = 'photo';
   const orientation = 'horizontal';
   const safesearch = true;
-  const perPage = 200;
+  const perPage = 40;
 
   try {
     const response = await axios(
@@ -81,10 +77,11 @@ async function getPosts() {
 
 // Функція створення шаблону розмітки
 function createMarkup(item) {
-  return `<a href="${item.largeImageURL}"
-        ><img src="${item.previewURL}" alt="${item.tags}" title=""
+  return `<a href="${item.largeImageURL}" class="gallery__item"
+        > <div class="card">
+        <img src="${item.webformatURL}" alt="${item.tags}" class="gallery__image" loading="lazy" title=""
       />
-      <div class="info">
+       <div class="info">
     <p class="info-item">
       <b>Likes:</b> ${item.likes}
     </p>
@@ -97,8 +94,10 @@ function createMarkup(item) {
     <p class="info-item">
       <b>Downloads</b> ${item.downloads}
     </p>
-  </div></a>
-        
+  </div>
+  </div>
+      </a>
+     
    `;
   //  `<div class="photo-card">
   //   <img src="${item.previewURL}" alt="${item.tags}" loading="lazy" />
@@ -121,14 +120,12 @@ function createMarkup(item) {
 }
 // Функція публікації розмітки
 async function generateMarkup() {
-  lightbox.refresh();
-
   const data = await getPosts();
   const markup = data.reduce((acc, item) => {
     return acc + createMarkup(item);
   }, '');
   galleryEl.insertAdjacentHTML('beforeend', markup);
-  console.log(markup);
+
   lightbox.refresh();
 }
 
@@ -145,3 +142,4 @@ hidesLoadMoreBtn();
 function showLoadMoreBtn() {
   btnLoadMoreEl.classList.remove('visually-hidden');
 }
+// Плавне прокручування
