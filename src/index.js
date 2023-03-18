@@ -12,7 +12,7 @@ const btnLoadMoreEl = document.querySelector('.load-more');
 
 let page = 1;
 let total = 0;
-// console.log(btnLoadMoreEl);
+// console.log(btnLoadMoreEl)
 
 //Викликаємо слухача
 formEl.addEventListener('submit', onFormSubmit);
@@ -22,7 +22,7 @@ btnLoadMoreEl.addEventListener('click', onLoadMoreClick);
 const lightbox = new SimpleLightbox('.gallery a', {});
 
 // lightbox.on();
-//=========================CALLBACKs================
+//=======================CALLBACKs================
 
 //Функція SUBMIT
 function onFormSubmit(e) {
